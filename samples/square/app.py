@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_dialogflow import DialogFlow
+from flask_dialogflow import Response, TextMessage
 
 app = Flask(__name__)
 dialogflow = DialogFlow(app, '/webhook')
@@ -12,11 +13,10 @@ def num(s):
 
 @dialogflow.action('math.square')
 def square(number):
-    return { "messages": [{
-                "type": 0,
-                "speech": str(num(number)*num(number))
-            }
-    ]}
+    answer = TextMessage(speech=str(num(number)*num(number)))
+    response = Response()
+    response.append(answer)
+    return response
 
 if __name__ == '__main__':
     PORT = 8090
