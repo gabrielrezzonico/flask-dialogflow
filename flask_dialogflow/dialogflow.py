@@ -146,7 +146,6 @@ class DialogFlow:
             if self.context_out is not None:
                 result.contextOut = self.context_out
 
-            print(json.dumps(result.__dict__, cls=MessageEncoder))
             response = FlaskResponse(
                 response=json.dumps(result.__dict__, cls=MessageEncoder),
                 status=200,
