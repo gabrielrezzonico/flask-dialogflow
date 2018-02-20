@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.1.1 (2018-02-20)
+++++++++++++++++
+
+- a57ef15 fix: fix sample view func and imports
+- d7c857a fix: remove print
+
 0.1 (2018-02-20)
 ++++++++++++++++
 
