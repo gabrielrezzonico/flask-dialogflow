@@ -1,12 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(name='Flask-Dialogflow',
-      version='0.1.1',
+      version='0.2',
       description='Simple framework for creating Dialog Flow (formerly API.AI) fulfillment webhooks',
       # see: https://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         'Intended Audience :: Developers',
-        'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
         'Framework :: Flask',
         'Programming Language :: Python :: 2',
@@ -20,7 +19,7 @@ setup(name='Flask-Dialogflow',
         'Topic :: Scientific/Engineering :: Artificial Intelligence'
       ],
       url='https://github.com/gabrielrezzonico/flask-dialogflow',
-      download_url = 'https://github.com/gabrielrezzonico/flask-dialogflow/tarball/0.1.1',
+      download_url = 'https://github.com/gabrielrezzonico/flask-dialogflow/tarball/0.2',
       author='Gabriel Rezzonico',
       author_email='gabriel@byte42.com',
       license='MIT',
