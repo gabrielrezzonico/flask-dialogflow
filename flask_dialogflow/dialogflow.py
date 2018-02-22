@@ -38,6 +38,8 @@ class DialogFlow:
         self._action_to_function_map = {}
         self._basic_auth_user = basic_auth_user
         self._basic_auth_pass = basic_auth_pass
+        self._default_view_func = None
+
         if app is not None:
             self.init_app(app, route, basic_auth_user, basic_auth_pass)
 
@@ -136,8 +138,13 @@ class DialogFlow:
         data_json = request.get_json(silent=True, force=True)
 
         action = data_json['result']['action']
-        view_func = self._action_to_function_map[action]
-
+        try:
+            view_func = self._action_to_function_map[action]
+        except KeyError:
+            if self._default_view_func:
+                view_func = self._default_view_func
+            else:
+                raise NotImplementedError('No registered view_func for action: "{}" and no default action specified.'.format(action))
         # update incoming information
         self.intent = data_json['result']['metadata']['intentName']
         self.context_in = data_json['result'].get('contexts', [])
@@ -180,7 +187,10 @@ class DialogFlow:
             >>> 
             >>> @dialogflow.action('core.onboarding')
             >>> def onboarding():
-            >>>    return 'Hello, World!'
+            >>>     answer = TextMessage(speech='Hello, World!')
+            >>>     response = Response()
+            >>>     response.append(answer)
+            >>>     return response
         """
 
         def decorator(f):
@@ -192,3 +202,29 @@ class DialogFlow:
                 self._flask_view_func(*args, **kw)
             return f
         return decorator
+
+
+    def default(self, f):
+        """
+        Register a default function to be used when an unknown action is received.
+        
+        Arguments:
+             {function} -- Function to be decorated
+        Example::
+            >>> app = Flask(__name__)
+            >>> dialogflow = DialogFlow(app, 'webhook/')
+            >>> 
+            >>> @dialogflow.default
+            >>> def default():
+            >>>     answer = TextMessage(speech='Something happened!')
+            >>>     response = Response()
+            >>>     response.append(answer)
+            >>>     return response
+        """
+
+        self._default_view_func = f
+
+        @wraps(f)
+        def wrapper(*args, **kw):
+            self._flask_view_func(*args, **kw)
+        return f
