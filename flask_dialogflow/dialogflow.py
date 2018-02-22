@@ -70,6 +70,19 @@ class DialogFlow:
         _app_stack.top._dialogflow_context_in = value
 
     @property
+    def original_request(self):
+        """Contains the original request (1-click integrations providers data) received from Google DialogFlow
+        
+        Returns:
+            [originalRequest -- originalRequest object
+        """
+        return getattr(_app_stack.top, '_dialogflow_original_request', [])
+
+    @original_request.setter
+    def original_request(self, value):
+        _app_stack.top._dialogflow_original_request = value
+
+    @property
     def intent(self):
         return getattr(_app_stack.top, '_dialogflow_intent', [])
 
@@ -128,7 +141,8 @@ class DialogFlow:
         # update incoming information
         self.intent = data_json['result']['metadata']['intentName']
         self.context_in = data_json['result'].get('contexts', [])
-
+        self.original_request = data_json['result'].get('originalRequest', None)
+        
         argspec = inspect.getargspec(view_func)
         arg_names = argspec.args
         arg_values = []
