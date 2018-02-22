@@ -141,7 +141,7 @@ class DialogFlow:
         # update incoming information
         self.intent = data_json['result']['metadata']['intentName']
         self.context_in = data_json['result'].get('contexts', [])
-        self.original_request = data_json['result'].get('originalRequest', None)
+        self.original_request = data_json.get('originalRequest', None)
         
         argspec = inspect.getargspec(view_func)
         arg_names = argspec.args
